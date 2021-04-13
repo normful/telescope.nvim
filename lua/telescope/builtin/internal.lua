@@ -560,10 +560,17 @@ internal.buffers = function(opts)
       default_selection_idx = 2
     end
 
+    local buf_info = vim.fn.getbufinfo(bufnr)[1]
+
+    local cloned_buf_info = vim.deepcopy(buf_info)
+    if cloned_buf_info.variables.term_title then
+      cloned_buf_info.name = cloned_buf_info.variables.term_title
+    end
+
     local element = {
       bufnr = bufnr,
       flag = flag,
-      info = vim.fn.getbufinfo(bufnr)[1],
+      info = cloned_buf_info,
     }
 
     if opts.sort_lastused and (flag == "#" or flag == "%") then
